@@ -1,0 +1,33 @@
+---
+- name: Configure Web Server
+  hosts: webservers
+  become: yes
+
+  tasks:
+    - name: Update package list
+      apt:
+        update_cache: yes
+
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Create custom web page
+      copy:
+        content: |
+          <html>
+          <head><title>DevOps Lab 3</title></head>
+          <body>
+          <h1>Welcome to DevOps Lab 3</h1>
+          <h2>Configured using Ansible</h2>
+          <p>Infrastructure automation successful.</p>
+          </body>
+          </html>
+        dest: /var/www/html/index.html
+
+    - name: Start and enable Nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
